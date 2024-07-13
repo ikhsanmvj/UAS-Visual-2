@@ -43,6 +43,8 @@ type
     procedure btnHapusClick(Sender: TObject);
     procedure dbgrd1CellClick(Column: TColumn);
     procedure edtCariChange(Sender: TObject);
+    procedure btnCetakClick(Sender: TObject);
+    procedure UpdateDiscount;
    
   private
     { Private declarations }
@@ -59,7 +61,7 @@ var
 
 implementation
 
-uses data_module;
+uses data_module, fast_report;
 
 {$R *.dfm}
 
@@ -129,14 +131,19 @@ begin
   cmbMember.Enabled := True;
 end;
 
-
+procedure TForm1.UpdateDiscount;
+begin
+ if cmbMember.Text = 'Yes' then
+    lblDiscountValue.Caption := '10%'
+  else if cmbMember.Text = 'No' then
+    lblDiscountValue.Caption := '5%'
+  else
+    lblDiscountValue.Caption := '';
+end;
 
 procedure TForm1.cmbMemberChange(Sender: TObject);
 begin
-  if cmbMember.Text = 'Yes' then
-    lblDiscountValue.Caption := '10%'
-  else
-    lblDiscountValue.Caption := '5%';
+  UpdateDiscount;
 end;
 
 
@@ -271,12 +278,16 @@ begin
     cmbMember.Text := DataModule1.ZKustomer.FieldByName('member').AsString;
     id := DataModule1.ZKustomer.FieldByName('id').AsInteger;
 
+
     // Enable and disable appropriate buttons
     btnBaru.Enabled := False;
     btnSimpan.Enabled := False;
     btnEdit.Enabled := True;
     btnHapus.Enabled := True;
     btnBatal.Enabled := True;
+
+    // Update discount;
+    UpdateDiscount;
   end;
 end;
 
@@ -291,5 +302,12 @@ with DataModule1.ZKustomer do
     Open;
   end;
 end;
+
+procedure TForm1.btnCetakClick(Sender: TObject);
+begin
+  Form2.preview;
+end;
+
+
 
 end.
